@@ -185,6 +185,7 @@ namespace Chloe.Data
 
         public static object GetEnum(this IDataReader reader, int ordinal, Type enumType)
         {
+            //李强注: 如果想简单的将数据库中的null数字转为enum为0，则可此处用"return Enum.ToObject(enumType, 0);"
             if (reader.IsDBNull(ordinal))
             {
                 return null;
