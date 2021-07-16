@@ -162,5 +162,10 @@ namespace Chloe.Entity
             this.Property.UpdateIgnore = updateIgnore;
             return this;
         }
+        IPrimitivePropertyBuilder IPrimitivePropertyBuilder.InsertIgnore(bool insertIgnore)
+        {
+            this.Property.InsertIgnore = insertIgnore;
+            return this;
+        }
     }
 }

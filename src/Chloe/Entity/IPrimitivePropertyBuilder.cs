@@ -17,6 +17,7 @@ namespace Chloe.Entity
         IPrimitivePropertyBuilder HasPrecision(byte? precision);
         IPrimitivePropertyBuilder HasSequence(string name, string schema = null);
         IPrimitivePropertyBuilder UpdateIgnore(bool updateIgnore = true);
+        IPrimitivePropertyBuilder InsertIgnore(bool updateIgnore = true);
     }
     public interface IPrimitivePropertyBuilder<TProperty> : IPrimitivePropertyBuilder
     {

@@ -107,6 +107,12 @@ namespace Chloe.Entity
                         continue;
                     }
 
+                    if (propertyAttribute is InsertIgnoreAttribute)
+                    {
+                        propertyBuilder.InsertIgnore(true);
+                        continue;
+                    }
+
                     SequenceAttribute sequenceAttribute = propertyAttribute as SequenceAttribute;
                     if (sequenceAttribute != null)
                     {

@@ -22,6 +22,11 @@ namespace Chloe.Descriptors
         /// </summary>
         public bool UpdateIgnore { get { return this.Definition.UpdateIgnore; } }
 
+        /// <summary>
+        /// 插入时忽略
+        /// </summary>
+        public bool InsertIgnore { get { return this.Definition.InsertIgnore; } }
+
         public DbColumn Column { get { return this.Definition.Column; } }
 
 
@@ -33,6 +38,11 @@ namespace Chloe.Descriptors
         public bool CannotUpdate()
         {
             return this.IsPrimaryKey || this.IsAutoIncrement || this.HasSequence() || this.IsRowVersion || this.UpdateIgnore;
+        }
+
+        public bool CannotInsert()
+        {
+            return this.IsAutoIncrement || this.InsertIgnore;
         }
     }
 }

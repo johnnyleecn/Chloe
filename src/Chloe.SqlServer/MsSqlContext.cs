@@ -97,6 +97,9 @@ namespace Chloe.SqlServer
                     continue;
                 }
 
+                if (propertyDescriptor.CannotInsert())
+                    continue;
+
                 object val = propertyDescriptor.GetValue(entity);
 
                 PublicHelper.NotNullCheck(propertyDescriptor, val);
