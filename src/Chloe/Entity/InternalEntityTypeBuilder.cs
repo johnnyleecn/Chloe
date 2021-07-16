@@ -37,6 +37,17 @@ namespace Chloe.Entity
         void ConfigureColumnMapping()
         {
             var propertyInfos = this.EntityType.PrimitiveProperties.Select(a => a.Property).ToList();
+            string colNamePrefix = TableAttribute.DefaultColumnPrefix;
+            if (EntityType.Annotations != null)
+            {
+                var tableAttr = EntityType.Annotations.Where(x => x.GetType() == typeof(TableAttribute)).FirstOrDefault();
+                if (tableAttr != null)
+                {
+                    var attr = (TableAttribute)tableAttr;
+                    if (!string.IsNullOrWhiteSpace(attr.ColumnPrefix))
+                        colNamePrefix = attr.ColumnPrefix;
+                }
+            }
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
                 IPrimitivePropertyBuilder propertyBuilder = this.Property(propertyInfo.Name);
@@ -45,6 +56,7 @@ namespace Chloe.Entity
                 propertyBuilder.IsAutoIncrement(false);
 
                 var propertyAttributes = propertyInfo.GetCustomAttributes();
+                bool mapped = false;
                 foreach (Attribute propertyAttribute in propertyAttributes)
                 {
                     propertyBuilder.HasAnnotation(propertyAttribute);
@@ -54,7 +66,10 @@ namespace Chloe.Entity
                         ColumnAttribute columnAttribute = (ColumnAttribute)propertyAttribute;
 
                         if (!string.IsNullOrEmpty(columnAttribute.Name))
+                        {
                             propertyBuilder.MapTo(columnAttribute.Name);
+                            mapped = true;
+                        }
 
                         if (columnAttribute.HasDbType())
                             propertyBuilder.HasDbType(columnAttribute.DbType);
@@ -97,6 +112,10 @@ namespace Chloe.Entity
                     {
                         propertyBuilder.HasSequence(sequenceAttribute.Name, sequenceAttribute.Schema);
                     }
+                }
+                if (!mapped)
+                {
+                    propertyBuilder.MapTo(colNamePrefix + propertyInfo.Name);
                 }
             }
 
